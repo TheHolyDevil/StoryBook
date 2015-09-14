@@ -1,9 +1,8 @@
 package com.github.theholydevil.storybook;
 
+import android.os.Environment;
 import android.util.Log;
-
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -15,11 +14,9 @@ import java.util.ArrayList;
  */
 public class BookHandler
 {
-    //TODO: Hardcoded
-    private static final String path= "/storage/emulated/0/StoryBook/";
+    private static final String path= Environment.getExternalStorageDirectory().getAbsolutePath() + "StoryBook/";
 
-    public static Book newBook(BookImporter importer)
-    {
+    public static Book newBook(BookImporter importer) {
         String bookPath = importer.getName().trim().toLowerCase() + "/";
 
         //TODO: Put Images in correct places /Chapter<i>/img<i>

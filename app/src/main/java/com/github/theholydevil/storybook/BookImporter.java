@@ -6,13 +6,13 @@ import java.util.ArrayList;
 /**
  * Created by Stefan on 07.09.2015.
  */
-public abstract class BookImporter {
+public interface BookImporter {
 
-    abstract public String getName();
+    String getName();
 
-    abstract public ArrayList<File> getSortedImageFileList();
+    ArrayList<File> getSortedImageFileList();
 
-    abstract public int getChapterCount();
+    int getChapterCount();
 
-    abstract public File getThumbnail();
+    File getThumbnail();
 }
