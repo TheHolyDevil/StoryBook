@@ -14,7 +14,20 @@ import java.util.ArrayList;
  */
 public class BookHandler
 {
-    private static final String path= Environment.getExternalStorageDirectory().getAbsolutePath() + "StoryBook/";
+    private static BookHandler _instance;
+    private Book savedBook;
+    private ArrayList<Book> books = new ArrayList<>();
+
+    private BookHandler() {}
+
+    private static final String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/StoryBook/";
+
+    private static BookHandler instance() {
+        if (_instance == null) {
+            _instance = new BookHandler();
+        }
+        return _instance;
+    }
 
     public static Book newBook(BookImporter importer) {
         String bookPath = importer.getName().trim().toLowerCase() + "/";
@@ -33,7 +46,6 @@ public class BookHandler
         //TODO: Create Thumbnail to /thumbnail.png
 
         Book book = new Book(bookPath);
-        book.setLastPosition(0);
         return book;
     }
 
@@ -117,26 +129,36 @@ public class BookHandler
      * @return List of all Books
      */
     public static ArrayList<Book> loadAllBooks() {
-        ArrayList<Book> bList = new ArrayList<>();
+        ArrayList<Book> books = instance().books;
 
-        try
-        {
-            FileReader fileReader = new FileReader(path + "books.path");
-            BufferedReader reader = new BufferedReader(fileReader);
-            String line = reader.readLine();
-            while(line != null && !line.isEmpty())
+        if (books.isEmpty()) {
+            try
             {
-                bList.add(new Book(path + line));
-                line = reader.readLine();
+                FileReader fileReader = new FileReader(path + "books.path");
+                BufferedReader reader = new BufferedReader(fileReader);
+                String line = reader.readLine();
+                while(line != null && !line.isEmpty())
+                {
+                    books.add(new Book(path + line));
+                    line = reader.readLine();
+                }
+                reader.close();
+                fileReader.close();
             }
-            reader.close();
-            fileReader.close();
-        }
-        catch(IOException ex)
-        {
-            Log.e("Book parse ex: ", ex.getMessage());
+            catch(IOException ex)
+            {
+                Log.e("Book parse ex: ", ex.getMessage());
+            }
         }
 
-        return bList;
+        return books;
+    }
+
+    public static Book currentBook() {
+        return instance().savedBook;
+    }
+
+    public static void saveBook(Book book) {
+        instance().savedBook = book;
     }
 }

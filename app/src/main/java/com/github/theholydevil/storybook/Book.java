@@ -29,8 +29,11 @@ public class Book {
     private String thumbnailPath;
     private int lastPosition;
     private String name;
-    private ReadingOrientation readingOrientation;
+    private ReadingOrientation readingOrientation = ReadingOrientation.RIGHT;
 
+    public ArrayList<Chapter> getChapterList() {
+        return chapterList;
+    }
 
     /**
      * Simple class for storing and getting information for a Book
@@ -143,9 +146,22 @@ public class Book {
      * @param lastPosition Index of new last read Page
      */
     public void setLastPosition(int lastPosition) {
-        this.lastPosition = lastPosition;
+        switch (this.getReadingOrientation()){
+            case LEFT:
+                this.lastPosition = this.getPagePathList().size() - lastPosition -1;
+                break;
+            default:
+                this.lastPosition = lastPosition;
+                break;
+        }
+        /**TODO: write Information to XML, but this method will be called on screen
+         * rotation. Careful with DOM
+         */
     }
 
+    public void setXMLLastPosition(int lastPosition){
+        this.lastPosition = lastPosition;
+    }
     /**
      * Gets Thumbnail of Book
      * @return Thumbnail as Bitmap Factory Object

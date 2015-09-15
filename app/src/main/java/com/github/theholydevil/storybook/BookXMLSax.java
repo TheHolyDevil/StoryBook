@@ -20,14 +20,14 @@ public class BookXMLSax extends DefaultHandler{
          case "Book":
              break;
          case "Attributes":
-             this.book.setLastPosition(Integer.parseInt(atb.getValue("lastPosition")));
-             this.book.setName(atb.getValue("name"));
              if(atb.getValue("orientation").equals("left")) {
                  this.book.setReadingOrientation(ReadingOrientation.LEFT);
              }
              else {
                  this.book.setReadingOrientation(ReadingOrientation.RIGHT);
              }
+             this.book.setXMLLastPosition(Integer.parseInt(atb.getValue("lastPosition")));
+             this.book.setName(atb.getValue("name"));
              break;
          case "Chapter":
              this.book.addChapter(atb.getValue("name"),

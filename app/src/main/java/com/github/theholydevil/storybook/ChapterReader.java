@@ -1,6 +1,5 @@
 package com.github.theholydevil.storybook;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -17,8 +16,7 @@ import android.widget.ImageView;
  * Created by Stefan on 06.09.2015.
  */
 
-public class ChapterReader extends Activity
-{
+public class ChapterReader {
     private ViewPager viewPager;
     private Book book;
     FragmentAdapter fragmentAdapter;
@@ -60,6 +58,10 @@ public class ChapterReader extends Activity
             super(fm);
             this.book = items;
             this.count = this.book.getPagePathList().size();
+        }
+
+        public Book getBook() {
+            return book;
         }
 
         @Override

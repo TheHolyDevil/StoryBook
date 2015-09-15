@@ -14,5 +14,5 @@ public interface BookImporter {
 
     int getChapterCount();
 
-    File getThumbnail();
+    //File getThumbnail();
 }
