@@ -1,7 +1,18 @@
 package com.github.theholydevil.storybook;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -161,4 +172,5 @@ public class BookHandler
     public static void saveBook(Book book) {
         instance().savedBook = book;
     }
+
 }

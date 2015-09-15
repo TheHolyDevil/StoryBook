@@ -4,34 +4,40 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 /**
  * Created by Stefan on 06.09.2015.
  */
 
-public class ChapterReader {
+public class ChapterReader extends FragmentActivity{
     private ViewPager viewPager;
-    private Book book;
     FragmentAdapter fragmentAdapter;
+    private Book book;
 
-    public ChapterReader(FragmentManager fm, ViewPager pager, Book book)
-    {
-        this.book = book;
-        fragmentAdapter = new FragmentAdapter(fm, this.book);
-        this.viewPager = pager;
-        this.viewPager.setAdapter(fragmentAdapter);
-        //this.viewPager.setOffscreenPageLimit(3); //Didn't make anything more smooth, only increases memory usage, try something else
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.fragment_chapter_reader);
+
+        fragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
+
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(fragmentAdapter);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
-    public void goToLastPosition()
-    {
+    public void goToLastPosition() {
         switch (this.book.getReadingOrientation()){
             case LEFT:
                 this.viewPager.setCurrentItem(this.book.getPagePathList().size()
@@ -43,27 +49,20 @@ public class ChapterReader {
         }
     }
 
-    public void goToChapter(int chapterIndex)
-    {
+    public void goToChapter(int chapterIndex) {
         this.viewPager.setCurrentItem(book.getChapterPageIndex(chapterIndex));
     }
 
-    public static class FragmentAdapter extends FragmentStatePagerAdapter
-    {
+    public static class FragmentAdapter extends FragmentStatePagerAdapter {
         int count;
         Book book;
 
-        public FragmentAdapter(FragmentManager fm, Book items)
+        public FragmentAdapter(FragmentManager fm)
         {
             super(fm);
-            this.book = items;
+            this.book = BookHandler.currentBook();
             this.count = this.book.getPagePathList().size();
         }
-
-        public Book getBook() {
-            return book;
-        }
-
         @Override
         public int getCount()
         {
@@ -76,8 +75,7 @@ public class ChapterReader {
         }
     }
 
-    public static class PageFragment extends Fragment
-    {
+    public static class PageFragment extends Fragment {
         //int pageIndex;
         String path;
 
