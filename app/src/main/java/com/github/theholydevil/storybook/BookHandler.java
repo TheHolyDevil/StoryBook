@@ -28,7 +28,6 @@ public class BookHandler
     private static BookHandler _instance;
     private Book savedBook;
     private ArrayList<Book> books = new ArrayList<>();
-    private FragmentAdapter fragmentAdapter;
 
     private BookHandler() {}
 
@@ -174,89 +173,4 @@ public class BookHandler
         instance().savedBook = book;
     }
 
-    public static void initChapterReaderFragmentAdapter(FragmentManager fragmentManager) {
-        FragmentAdapter fragmentAdapter = instance().fragmentAdapter;
-
-        if (fragmentAdapter == null) {
-            instance().fragmentAdapter = new FragmentAdapter(fragmentManager);
-        }
-    }
-
-    public static FragmentAdapter getChapterReaderFragmentAdapter() {
-        FragmentAdapter fragmentAdapter = instance().fragmentAdapter;
-        if (fragmentAdapter == null) {
-            throw new NullPointerException("Chapter Reader Fragment Adapter was not initialized");
-        }
-
-        return fragmentAdapter;
-    }
-
-    public static class FragmentAdapter extends FragmentStatePagerAdapter {
-        int count;
-        Book book;
-
-        public FragmentAdapter(FragmentManager fm)
-        {
-            super(fm);
-            this.count = this.book.getPagePathList().size();
-        }
-
-        public void setBook(Book book) {
-            this.book = book;
-        }
-
-        @Override
-        public int getCount()
-        {
-            return count;
-        }
-
-        @Override
-        public Fragment getItem(int position){
-            return PageFragment.newInstance(position, this.book);
-        }
-    }
-
-    public static class PageFragment extends Fragment {
-        //int pageIndex;
-        String path;
-
-        static PageFragment newInstance(int index, Book book)
-        {
-            PageFragment f = new PageFragment();
-
-            Bundle args = new Bundle();
-            //args.putInt("page", index);
-            args.putString("path", book.getItemPath(index));
-            f.setArguments(args);
-
-            return f;
-        }
-
-        @Override
-        public void onCreate(Bundle savedInstanceState)
-        {
-            super.onCreate(savedInstanceState);
-            //this.pageIndex = getArguments().getInt("page");
-            this.path = getArguments().getString("path");
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        {
-            View v = inflater.inflate(R.layout.fragment_page, container, false);
-            ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
-
-            Bitmap bitmap = BitmapFactory.decodeFile(this.path);
-            imageView.setImageBitmap(bitmap);
-
-            return v;
-        }
-
-        @Override
-        public void onActivityCreated(Bundle savedInstanceState)
-        {
-            super.onActivityCreated(savedInstanceState);
-        }
-    }
 }

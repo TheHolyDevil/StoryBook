@@ -1,6 +1,6 @@
 package com.github.theholydevil.storybook;
 
-import android.support.v4.view.ViewPager;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,14 +10,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     GridView gridView;
-    ArrayList<Button> buttonBookList = new ArrayList<>();
     ArrayList<Book> bookList = new ArrayList<>();
 
     @Override
@@ -38,9 +36,7 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, android.R.id.text1,
                 bookNameList);
         gridView.setAdapter(listBookAdapter);
-        gridView.setOnItemClickListener(new bookListListener());
-
-        BookHandler.initChapterReaderFragmentAdapter(this.getSupportFragmentManager());
+        gridView.setOnItemClickListener(new bookListListener(this));
     }
 
     @Override
@@ -70,59 +66,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        if (pager != null) {
-            savedInstanceState.putBoolean("reading", true);
-        }
-
-        savedInstanceState.putBoolean("reading", false);
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState){
-        super.onSaveInstanceState(savedInstanceState);
-        if (savedInstanceState.getBoolean("reading")) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            try {
-                getSupportActionBar().hide();
-            } catch (NullPointerException e) {
-                Log.e("MainAct/HideBar", e.getMessage());
-            }
-
-            setContentView(R.layout.fragment_chapter_reader);
-            ChapterReader reader = new ChapterReader(
-                    (ViewPager) findViewById(R.id.pager),
-                    BookHandler.currentBook());
-
-            reader.goToLastPosition();
-        }
-    }
-
     private class bookListListener implements AdapterView.OnItemClickListener {
+        AppCompatActivity compatActivity;
+
+        public bookListListener(AppCompatActivity activity) {
+            this.compatActivity = activity;
+        }
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view,
                          int position, long id) {
-
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            try {
-                getSupportActionBar().hide();
-            } catch (NullPointerException e) {
-                Log.e("MainAct/HideBar", e.getMessage());
-            }
-
-            setContentView(R.layout.fragment_chapter_reader);
-            ChapterReader reader = new ChapterReader(
-                    (ViewPager) findViewById(R.id.pager),
-                    bookList.get(position));
-
-            reader.goToLastPosition();
+            BookHandler.saveBook(bookList.get(position));
+            startActivity(new Intent(this.compatActivity, ChapterReader.class));
         }
-
     }
 }
