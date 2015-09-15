@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
                 bookNameList);
         gridView.setAdapter(listBookAdapter);
         gridView.setOnItemClickListener(new bookListListener());
+
+        BookHandler.initChapterReaderFragmentAdapter(this.getSupportFragmentManager());
     }
 
     @Override
@@ -72,21 +74,17 @@ public class MainActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         if (pager != null) {
-            ChapterReader.FragmentAdapter adapter = (ChapterReader.FragmentAdapter) pager.getAdapter();
-            adapter.getBook().setLastPosition(pager.getCurrentItem());
-            savedInstanceState.putBoolean("wasReading", true);
-            BookHandler.saveBook(adapter.getBook());
-
+            savedInstanceState.putBoolean("reading", true);
         }
 
-        savedInstanceState.putBoolean("wasReading", false);
+        savedInstanceState.putBoolean("reading", false);
         super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
-        if (savedInstanceState.getBoolean("wasReading")) {
+        if (savedInstanceState.getBoolean("reading")) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
             try {
@@ -96,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             setContentView(R.layout.fragment_chapter_reader);
-            ChapterReader reader = new ChapterReader(getSupportFragmentManager(),
+            ChapterReader reader = new ChapterReader(
                     (ViewPager) findViewById(R.id.pager),
                     BookHandler.currentBook());
 
@@ -119,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             setContentView(R.layout.fragment_chapter_reader);
-            ChapterReader reader = new ChapterReader(getSupportFragmentManager(),
+            ChapterReader reader = new ChapterReader(
                     (ViewPager) findViewById(R.id.pager),
                     bookList.get(position));
 
