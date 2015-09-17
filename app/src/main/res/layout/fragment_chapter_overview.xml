@@ -1,0 +1,31 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.github.theholydevil.storybook.ChapterOverview">
+
+        <GridView
+            android:id="@+id/grid_chapter_view"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/continue_reading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:clickable="true"
+            android:src="@drawable/ic_play_circle_outline_white_48dp"
+            app:layout_anchorGravity="bottom|right|end"
+            android:layout_gravity="right|bottom"/>
+
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+

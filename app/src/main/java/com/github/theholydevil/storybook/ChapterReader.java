@@ -20,8 +20,7 @@ import android.widget.ImageView;
 
 public class ChapterReader extends FragmentActivity{
     private ViewPager viewPager;
-    FragmentAdapter fragmentAdapter;
-    private Book book;
+    private FragmentAdapter fragmentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,27 +29,12 @@ public class ChapterReader extends FragmentActivity{
         setContentView(R.layout.fragment_chapter_reader);
 
         fragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
-
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(fragmentAdapter);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    }
 
-    public void goToLastPosition() {
-        switch (this.book.getReadingOrientation()){
-            case LEFT:
-                this.viewPager.setCurrentItem(this.book.getPagePathList().size()
-                        - this.book.getLastPosition() - 1);
-                break;
-            default:
-                this.viewPager.setCurrentItem(this.book.getLastPosition());
-                break;
-        }
-    }
-
-    public void goToChapter(int chapterIndex) {
-        this.viewPager.setCurrentItem(book.getChapterPageIndex(chapterIndex));
+        viewPager.setCurrentItem(getIntent().getIntExtra("startposition", 0), false);
     }
 
     public static class FragmentAdapter extends FragmentStatePagerAdapter {
