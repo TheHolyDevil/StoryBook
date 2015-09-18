@@ -96,7 +96,7 @@ public class Book {
                 String line = reader.readLine();
                 while(line != null && !line.isEmpty())
                 {
-                    this.pagePathList.add(prefix + line);
+                    this.pagePathList.add(line);
                     line = reader.readLine();
                 }
                 reader.close();

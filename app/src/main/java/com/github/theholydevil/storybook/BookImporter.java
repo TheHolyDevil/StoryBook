@@ -10,9 +10,13 @@ public interface BookImporter {
 
     String getName();
 
+    File getDirectory();
+
     ArrayList<File> getSortedImageFileList();
 
-    int getChapterCount();
+    ArrayList<Chapter> getChapterList();
+
+    ReadingOrientation getOrientation();
 
     //File getThumbnail();
 }

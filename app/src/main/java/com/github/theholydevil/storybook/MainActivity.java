@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_add_book:
                 //TODO Add book importer choose dialog Code
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        OpenFileFragment.newInstance(OpenFileFragmentState.DIRECTORY)).commit();
                 return true;
             case R.id.action_settings:
                 return true;
