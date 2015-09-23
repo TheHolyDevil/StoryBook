@@ -145,6 +145,7 @@ public class ChapterOverview extends Fragment {
 
             ViewHolder h = (ViewHolder) rowView.getTag();
 
+            h.position = position;
             h.text.setText(item);
             if (onlineSource) h.btn.setOnClickListener(new View.OnClickListener() {
                 @Override
