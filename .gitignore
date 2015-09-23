@@ -1,9 +1,37 @@
-*.properties
+# Built application files
+/*/build/
+
+# Crashlytics configuations
+com_crashlytics_export_strings.xml
+
+# Local configuration file (sdk path, etc)
 local.properties
-local.properties
-.gradle/2.4/taskArtifacts/cache.properties.lock
-.gradle/2.4/taskArtifacts/fileSnapshots.bin
-.gradle/2.4/taskArtifacts/taskArtifacts.bin
+
+# Gradle generated files
+.gradle/
+
+# Signing files
+.signing/
+
+# User-specific configurations
+.idea/libraries/
 .idea/workspace.xml
-local.properties
-.gradle/2.4/taskArtifacts/fileHashes.bin
+.idea/tasks.xml
+.idea/.name
+.idea/compiler.xml
+.idea/copyright/profiles_settings.xml
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/scopes/scope_settings.xml
+.idea/vcs.xml
+*.iml
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
