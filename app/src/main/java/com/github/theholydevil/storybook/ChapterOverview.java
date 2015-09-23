@@ -11,10 +11,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-
 import com.github.theholydevil.storybook.model.Book;
 import com.github.theholydevil.storybook.model.Chapter;
-
 import java.util.ArrayList;
 
 

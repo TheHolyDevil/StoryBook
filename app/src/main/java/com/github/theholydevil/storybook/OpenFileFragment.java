@@ -154,7 +154,7 @@ public class OpenFileFragment extends Fragment {
         public void onClick(View v) {
             BookHandler.newBook(new StoryDirectoryImporter(currentPath, context));
             getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    BookOverview.newInstance()).commit();
+                    BookOverview.newInstance()).addToBackStack(null).commit();
         }
     }
 }
