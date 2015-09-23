@@ -1,20 +1,16 @@
 package com.github.theholydevil.storybook;
 
 import android.os.Environment;
-import android.support.annotation.RequiresPermission;
 import android.util.Log;
-
 import com.github.theholydevil.storybook.importer.BookImporter;
 import com.github.theholydevil.storybook.model.Book;
 import com.github.theholydevil.storybook.model.Chapter;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import static java.lang.System.lineSeparator;
 
 /**
@@ -66,19 +62,21 @@ public class BookHandler
 
     public static String getBookXML(BookImporter importer, ArrayList<Chapter> chapterArrayList) {
         return writeBookXML(importer.getName(),
-                importer.getOrientation(), 0,
+                importer.getOrientation(), importer.isOnlineSource(), 0,
                 chapterArrayList).toString();
     }
 
     public static String getBookXML(Book book) {
         return writeBookXML(book.getName(),
                 book.getReadingOrientation(),
+                book.isFromOnlineSource(),
                 book.getLastPosition(),
                 book.getChapterList()).toString();
     }
 
-    public static StringBuilder writeBookXML(String name, ReadingOrientation orientation,
+    public static StringBuilder writeBookXML(String name, ReadingOrientation orientation, boolean onlineSource,
                                              int lastPosition, ArrayList<Chapter> chapterArrayList) {
+
         StringBuilder xmlStringBuilder = new StringBuilder();
 
         xmlStringBuilder.append("<Book>\n<Attributes orientation = \"");
@@ -93,7 +91,8 @@ public class BookHandler
         }
         else xmlStringBuilder.append("right");
 
-        xmlStringBuilder.append("\" name = \"" + name + "\" lastPosition = \"" + lastPosition + "\"> \n");
+        xmlStringBuilder.append("\" name = \"" + name + "\" lastPosition = \"" + lastPosition + "\"" +
+                " isOnlineSource = \"" + onlineSource + "\" /> \n");
 
         for(Chapter chapter : chapterArrayList) {
             xmlStringBuilder.append("<Chapter name = \"" + chapter.getName() + "\" pageIndex = \""
@@ -144,7 +143,7 @@ public class BookHandler
                     line = reader.readLine();
                 }
                 else if (cmp >= 0) {
-                    sb.append(bookPath + lineSeparator());
+                    sb.append(bookPath + "\n");
                     bookPath = "";
                     sb.append(line);
                     line = reader.readLine();
@@ -159,7 +158,7 @@ public class BookHandler
 
             if (!bookPath.isEmpty())
             {
-                sb.append(bookPath + lineSeparator());
+                sb.append(bookPath + "\n");
             }
 
             reader.close();

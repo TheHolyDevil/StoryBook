@@ -65,7 +65,7 @@ public class BookOverview extends Fragment {
             android.support.v4.app.Fragment chapterOverview = ChapterOverview.newInstance(
                     bookList.get(position));
             getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    chapterOverview).commit();
+                    chapterOverview).addToBackStack(null).commit();
         }
     }
 }

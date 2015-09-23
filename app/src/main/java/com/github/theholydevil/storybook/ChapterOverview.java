@@ -1,6 +1,6 @@
 package com.github.theholydevil.storybook;
 
-
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,15 +8,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
-
+import android.widget.ImageButton;
+import android.widget.TextView;
 import com.github.theholydevil.storybook.model.Book;
 import com.github.theholydevil.storybook.model.Chapter;
-
 import java.util.ArrayList;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,13 +23,13 @@ public class ChapterOverview extends Fragment {
     ArrayList<String> chapterNameList = new ArrayList<>();
     ArrayList<Integer> chapterIndexList = new ArrayList<>();
     GridView gridView;
+    boolean onlineSource;
 
     public ChapterOverview() {
         // Required empty public constructor
     }
 
-    static ChapterOverview newInstance(Book book)
-    {
+    static ChapterOverview newInstance(Book book) {
         ChapterOverview f = new ChapterOverview();
 
         Bundle args = new Bundle();
@@ -49,6 +47,7 @@ public class ChapterOverview extends Fragment {
         args.putStringArrayList("names", chapterNameList);
         args.putIntegerArrayList("indexes", chapterIndexList);
         args.putString("title", book.getName());
+        args.putBoolean("online", book.isFromOnlineSource());
 
         BookHandler.saveBook(book);
 
@@ -62,6 +61,7 @@ public class ChapterOverview extends Fragment {
         super.onCreate(savedInstanceState);
         chapterIndexList = getArguments().getIntegerArrayList("indexes");
         chapterNameList = getArguments().getStringArrayList("names");
+        this.onlineSource = getArguments().getBoolean("online");
     }
 
     @Override
@@ -72,11 +72,10 @@ public class ChapterOverview extends Fragment {
 
         gridView = (GridView) view.findViewById(R.id.grid_chapter_view);
 
-        ArrayAdapter<String> listChapterAdapter = new ArrayAdapter<>(getContext(),
+        chapterOverviewListAdapter listChapterAdapter = new chapterOverviewListAdapter(getContext(),
                 android.R.layout.simple_list_item_1, android.R.id.text1,
                 chapterNameList);
         gridView.setAdapter(listChapterAdapter);
-        gridView.setOnItemClickListener(new chapterListListener(getContext()));
 
         view.findViewById(R.id.continue_reading).setOnClickListener(new continueListener(getContext()));
 
@@ -85,7 +84,7 @@ public class ChapterOverview extends Fragment {
         return view;
     }
 
-    private class chapterListListener implements AdapterView.OnItemClickListener {
+    private class chapterListListener implements View.OnClickListener {
         Context compatActivity;
 
         public chapterListListener(Context activity) {
@@ -93,8 +92,8 @@ public class ChapterOverview extends Fragment {
         }
 
         @Override
-        public void onItemClick(AdapterView<?> parent, View view,
-                                int position, long id) {
+        public void onClick(View view) {
+            int position = ((chapterOverviewListAdapter.ViewHolder) view.getTag()).position;
             Intent readerIntent = new Intent(this.compatActivity, ChapterReader.class);
             readerIntent.putExtra("startposition", chapterIndexList.get(position));
             startActivity(readerIntent);
@@ -114,5 +113,60 @@ public class ChapterOverview extends Fragment {
             readerIntent.putExtra("startposition", BookHandler.currentBook().getLastPosition());
             startActivity(readerIntent);
         }
+    }
+
+    class chapterOverviewListAdapter extends ArrayAdapter<String> {
+
+        public chapterOverviewListAdapter(Context context, int resource, int textViewResourceId, ArrayList<String> objects) {
+            super(context, resource, textViewResourceId, objects);
+        }
+
+        @Override
+        public boolean  areAllItemsEnabled() {
+            return false;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            String item = getItem(position);
+
+            View rowView = convertView;
+
+            if (rowView == null) {
+                LayoutInflater inflater = ((Activity) getContext()).getLayoutInflater();
+                if (onlineSource)  rowView = inflater.inflate(R.layout.listview_chapter_row_online, parent, false);
+                else rowView = inflater.inflate(R.layout.listview_chapter_row_offline, parent, false);
+                ViewHolder h = new ViewHolder();
+                h.text = (TextView) rowView.findViewById(R.id.listView_chapter_row_text);
+                if (onlineSource) h.btn = (ImageButton) rowView.findViewById(R.id.listView_chapter_row_imageButton);
+                h.position = position;
+                rowView.setTag(h);
+            }
+
+            ViewHolder h = (ViewHolder) rowView.getTag();
+
+            h.position = position;
+            h.text.setText(item);
+            if (onlineSource) h.btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // DO what you want to recieve on btn click there.
+                }
+            });
+
+            rowView.setClickable(true);
+            rowView.setOnClickListener(new chapterListListener(getContext()));
+
+            return rowView;
+        }
+
+        class ViewHolder {
+            TextView text;
+            ImageButton btn;
+            int position;
+        }
+
+
+
     }
 }

@@ -45,6 +45,7 @@ public class ChapterReader extends FragmentActivity{
     @Override
     public void onStop() {
         BookHandler.currentBook().setLastPosition(this.viewPager.getCurrentItem());
+        BookHandler.currentBook().updateXML();
 
         super.onStop();
     }

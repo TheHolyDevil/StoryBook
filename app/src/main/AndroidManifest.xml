@@ -20,8 +20,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChapterReader">
-
+            android:name=".ChapterReader"
+            android:parentActivityName=".MainActivity">
         </activity>
 
     </application>

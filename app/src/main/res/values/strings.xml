@@ -5,13 +5,11 @@
     <string name="content_Description_ImageView_Page">Page Image</string>
     <string name="action_add_book">Add Story</string>
     <string name="action_add_chapter">Add Chapter</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="choose_directory">Choose Directory</string>
     <string name="add_directory">Add Directory</string>
     <string name="cancel_add_directory">Cancel</string>
     <string name="get_reading_orientation">Reading Orientation</string>
     <string name="get_reading_orientation_left">Left</string>
     <string name="get_reading_orientation_right">Right</string>
+    <string name="content_description_ListViewButton">ListView Button Icon</string>
 </resources>
