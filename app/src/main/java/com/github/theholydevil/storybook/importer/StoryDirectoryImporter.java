@@ -1,9 +1,15 @@
-package com.github.theholydevil.storybook;
+package com.github.theholydevil.storybook.importer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+
+import com.github.theholydevil.storybook.BookHandler;
+import com.github.theholydevil.storybook.model.Chapter;
+import com.github.theholydevil.storybook.R;
+import com.github.theholydevil.storybook.ReadingOrientation;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -97,7 +103,7 @@ public class StoryDirectoryImporter implements BookImporter {
             //TODO: WORKAROUND
 
             BookHandler.loadAllBooks().get(0).setReadingOrientation(orientation);
-
+            BookHandler.loadAllBooks().get(0).updateXML();
         }
     }
 }

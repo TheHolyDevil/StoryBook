@@ -1,3 +1,8 @@
 *.properties
 local.properties
 local.properties
+.gradle/2.4/taskArtifacts/cache.properties.lock
+.gradle/2.4/taskArtifacts/fileSnapshots.bin
+.gradle/2.4/taskArtifacts/taskArtifacts.bin
+.idea/workspace.xml
+local.properties

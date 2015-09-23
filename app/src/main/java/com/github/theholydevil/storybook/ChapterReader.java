@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.github.theholydevil.storybook.model.Book;
+
 /**
  * Created by Stefan on 06.09.2015.
  */
@@ -34,7 +36,17 @@ public class ChapterReader extends FragmentActivity{
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        viewPager.setCurrentItem(getIntent().getIntExtra("startposition", 0), false);
+        if (BookHandler.currentBook().getReadingOrientation().equals(ReadingOrientation.LEFT)) {
+            viewPager.setCurrentItem(BookHandler.currentBook().getPagePathList().size() - 1
+                    - getIntent().getIntExtra("startposition", 0), false);
+        } else viewPager.setCurrentItem(getIntent().getIntExtra("startposition", 0), false);
+    }
+
+    @Override
+    public void onStop() {
+        BookHandler.currentBook().setLastPosition(this.viewPager.getCurrentItem());
+
+        super.onStop();
     }
 
     public static class FragmentAdapter extends FragmentStatePagerAdapter {

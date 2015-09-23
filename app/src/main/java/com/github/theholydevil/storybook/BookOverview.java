@@ -9,6 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
+import com.github.theholydevil.storybook.model.Book;
+
 import java.util.ArrayList;
 
 

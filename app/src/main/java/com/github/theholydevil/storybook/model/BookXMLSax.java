@@ -1,4 +1,6 @@
-package com.github.theholydevil.storybook;
+package com.github.theholydevil.storybook.model;
+
+import com.github.theholydevil.storybook.ReadingOrientation;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
@@ -26,7 +28,7 @@ public class BookXMLSax extends DefaultHandler{
              else {
                  this.book.setReadingOrientation(ReadingOrientation.RIGHT);
              }
-             this.book.setXMLLastPosition(Integer.parseInt(atb.getValue("lastPosition")));
+             this.book.setLastPosition(Integer.parseInt(atb.getValue("lastPosition")), true);
              this.book.setName(atb.getValue("name"));
              break;
          case "Chapter":

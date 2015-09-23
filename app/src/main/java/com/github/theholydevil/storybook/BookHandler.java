@@ -1,7 +1,13 @@
 package com.github.theholydevil.storybook;
 
 import android.os.Environment;
+import android.support.annotation.RequiresPermission;
 import android.util.Log;
+
+import com.github.theholydevil.storybook.importer.BookImporter;
+import com.github.theholydevil.storybook.model.Book;
+import com.github.theholydevil.storybook.model.Chapter;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -37,7 +43,17 @@ public class BookHandler
 
         ArrayList<Chapter> chapterArrayList = importer.getChapterList();
 
-        writeBookXML(importer, chapterArrayList);
+        String bookXML = getBookXML(importer, chapterArrayList);
+
+        try {
+            FileWriter fileWriter = new FileWriter(importer.getDirectory().getAbsolutePath()
+                    + "/book.xml");
+            fileWriter.write(bookXML);
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            Log.e("BookHandler/XMLUpdate", e.getMessage());
+        }
 
         createPagesPath(importer.getSortedImageFileList(), path);
 
@@ -48,24 +64,36 @@ public class BookHandler
         return book;
     }
 
-    private static void writeBookXML(BookImporter importer, ArrayList<Chapter> chapterArrayList) {
+    public static String getBookXML(BookImporter importer, ArrayList<Chapter> chapterArrayList) {
+        return writeBookXML(importer.getName(),
+                importer.getOrientation(), 0,
+                chapterArrayList).toString();
+    }
+
+    public static String getBookXML(Book book) {
+        return writeBookXML(book.getName(),
+                book.getReadingOrientation(),
+                book.getLastPosition(),
+                book.getChapterList()).toString();
+    }
+
+    public static StringBuilder writeBookXML(String name, ReadingOrientation orientation,
+                                             int lastPosition, ArrayList<Chapter> chapterArrayList) {
         StringBuilder xmlStringBuilder = new StringBuilder();
 
         xmlStringBuilder.append("<Book>\n<Attributes orientation = \"");
 
-        if (importer.getOrientation() != null) {
-            switch (importer.getOrientation()) {
-                case LEFT:
-                    xmlStringBuilder.append("left");
-                    break;
-                case RIGHT:
-                    xmlStringBuilder.append("right");
-                    break;
-            }
-        } else {
-            xmlStringBuilder.append("right");
+        if (orientation != null) switch (orientation) {
+            case LEFT:
+                xmlStringBuilder.append("left");
+                break;
+            case RIGHT:
+                xmlStringBuilder.append("right");
+                break;
         }
-        xmlStringBuilder.append("\" name = \"" + importer.getName() + "\" lastPosition = \"0\"> \n");
+        else xmlStringBuilder.append("right");
+
+        xmlStringBuilder.append("\" name = \"" + name + "\" lastPosition = \"" + lastPosition + "\"> \n");
 
         for(Chapter chapter : chapterArrayList) {
             xmlStringBuilder.append("<Chapter name = \"" + chapter.getName() + "\" pageIndex = \""
@@ -73,16 +101,7 @@ public class BookHandler
         }
 
         xmlStringBuilder.append("</Book>\n");
-
-        try {
-            FileWriter fileWriter = new FileWriter(importer.getDirectory().getAbsolutePath()
-                    + "/book.xml");
-            fileWriter.write(xmlStringBuilder.toString());
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (IOException e) {
-            Log.e("BookHandler/XMLUpdate", e.getMessage());
-        }
+        return xmlStringBuilder;
     }
 
     /**

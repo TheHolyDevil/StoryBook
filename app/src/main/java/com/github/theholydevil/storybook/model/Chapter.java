@@ -1,4 +1,4 @@
-package com.github.theholydevil.storybook;
+package com.github.theholydevil.storybook.model;
 
 /**
  * Created by Stefan on 14.09.2015.

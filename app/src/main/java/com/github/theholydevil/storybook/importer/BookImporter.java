@@ -1,4 +1,7 @@
-package com.github.theholydevil.storybook;
+package com.github.theholydevil.storybook.importer;
+
+import com.github.theholydevil.storybook.model.Chapter;
+import com.github.theholydevil.storybook.ReadingOrientation;
 
 import java.io.File;
 import java.util.ArrayList;

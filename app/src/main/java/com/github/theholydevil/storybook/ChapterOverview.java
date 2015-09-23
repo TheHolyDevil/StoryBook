@@ -12,6 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
+import com.github.theholydevil.storybook.model.Book;
+import com.github.theholydevil.storybook.model.Chapter;
+
 import java.util.ArrayList;
 
 
@@ -75,6 +78,8 @@ public class ChapterOverview extends Fragment {
         gridView.setAdapter(listChapterAdapter);
         gridView.setOnItemClickListener(new chapterListListener(getContext()));
 
+        view.findViewById(R.id.continue_reading).setOnClickListener(new continueListener(getContext()));
+
         getActivity().setTitle(getArguments().getString("title", "StoryBook"));
 
         return view;
@@ -96,4 +101,18 @@ public class ChapterOverview extends Fragment {
         }
     }
 
+    private class continueListener implements View.OnClickListener {
+        Context compatActivity;
+
+        public continueListener(Context compatActivity) {
+            this.compatActivity = compatActivity;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent readerIntent = new Intent(this.compatActivity, ChapterReader.class);
+            readerIntent.putExtra("startposition", BookHandler.currentBook().getLastPosition());
+            startActivity(readerIntent);
+        }
+    }
 }

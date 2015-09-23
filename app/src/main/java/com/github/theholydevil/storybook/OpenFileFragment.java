@@ -11,6 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
+import com.github.theholydevil.storybook.importer.StoryDirectoryImporter;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -99,7 +102,7 @@ public class OpenFileFragment extends Fragment {
 
         getActivity().setTitle(R.string.choose_directory);
 
-        view.findViewById(R.id.add_directory_button).setOnClickListener(new addBookButtonListener(getActivity()));
+        view.findViewById(R.id.confirm_selection).setOnClickListener(new addBookButtonListener(getActivity()));
 
         return view;
     }
