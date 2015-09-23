@@ -30,6 +30,7 @@ public class BookXMLSax extends DefaultHandler{
              }
              this.book.setLastPosition(Integer.parseInt(atb.getValue("lastPosition")), true);
              this.book.setName(atb.getValue("name"));
+             this.book.setFromOnlineSource(Boolean.parseBoolean(atb.getValue("isOnlineSource")));
              break;
          case "Chapter":
              this.book.addChapter(atb.getValue("name"),

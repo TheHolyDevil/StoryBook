@@ -21,5 +21,7 @@ public interface BookImporter {
 
     ReadingOrientation getOrientation();
 
+    boolean isOnlineSource();
+
     //File getThumbnail();
 }

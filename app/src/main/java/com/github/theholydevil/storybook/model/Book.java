@@ -29,6 +29,7 @@ public class Book {
     private String thumbnailPath;
     private int lastPosition;
     private String name;
+    private boolean fromOnlineSource;
     private ReadingOrientation readingOrientation = ReadingOrientation.RIGHT;
 
     public ArrayList<Chapter> getChapterList() {
@@ -50,8 +51,7 @@ public class Book {
      * Extension of Constructor to avoid unnecessary complexity
      */
     private void parseBook(){
-        try
-        {
+        try {
             SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
             SAXParser newSAXParser = saxParserFactory.newSAXParser();
             XMLReader xmlReader = newSAXParser.getXMLReader();
@@ -77,7 +77,7 @@ public class Book {
      * @param isRead Indicates if Chapter is marked Read
      */
     public void addChapter(String name, int pageIndex, boolean isRead){
-        this.chapterList.add(new Chapter(name,pageIndex, isRead));
+        this.chapterList.add(new Chapter(name, pageIndex, isRead));
     }
 
     /**
@@ -154,9 +154,6 @@ public class Book {
                 this.lastPosition = lastPosition;
                 break;
         }
-        /**TODO: write Information to XML, but this method will be called on screen
-         * rotation. Careful with DOM
-         */
     }
 
     public void setLastPosition(int lastPosition, boolean absolute){
@@ -203,6 +200,14 @@ public class Book {
      */
     public String getName() {
         return name;
+    }
+
+    public boolean isFromOnlineSource() {
+        return fromOnlineSource;
+    }
+
+    public void setFromOnlineSource(boolean fromOnlineSource) {
+        this.fromOnlineSource = fromOnlineSource;
     }
 
     /**

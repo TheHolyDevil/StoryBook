@@ -88,6 +88,11 @@ public class StoryDirectoryImporter implements BookImporter {
         return orientation;
     }
 
+    @Override
+    public boolean isOnlineSource() {
+        return false;
+    }
+
     private class dialogClickHandler implements DialogInterface.OnClickListener {
 
         @Override
