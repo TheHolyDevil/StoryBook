@@ -1,25 +1,25 @@
-package com.github.theholydevil.storybook;
+package com.github.theholydevil.storybook.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+
+import com.github.theholydevil.storybook.BookHandler;
+import com.github.theholydevil.storybook.ReadingOrientation;
+
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
-/**
- * Created by Stefan on 06.09.2015.
- */
-enum ReadingOrientation {RIGHT, LEFT}
 
 public class Book {
     private ArrayList<String> pagePathList = new ArrayList<>();
@@ -96,7 +96,7 @@ public class Book {
                 String line = reader.readLine();
                 while(line != null && !line.isEmpty())
                 {
-                    this.pagePathList.add(prefix + line);
+                    this.pagePathList.add(line);
                     line = reader.readLine();
                 }
                 reader.close();
@@ -159,9 +159,11 @@ public class Book {
          */
     }
 
-    public void setXMLLastPosition(int lastPosition){
-        this.lastPosition = lastPosition;
+    public void setLastPosition(int lastPosition, boolean absolute){
+        if (absolute) this.lastPosition = lastPosition;
+        else this.setLastPosition(lastPosition);
     }
+
     /**
      * Gets Thumbnail of Book
      * @return Thumbnail as Bitmap Factory Object
@@ -201,5 +203,20 @@ public class Book {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * updates the book.xml to commit changes made to the Books settings
+     */
+    public void updateXML() {
+        try {
+            FileWriter fileWriter = new FileWriter(this.path
+                    + "book.xml");
+            fileWriter.write(BookHandler.getBookXML(this));
+            fileWriter.flush();
+            fileWriter.close();
+        } catch (IOException e) {
+            Log.e("BookHandler/XMLUpdate", e.getMessage());
+        }
     }
 }

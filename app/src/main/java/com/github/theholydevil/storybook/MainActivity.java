@@ -1,22 +1,11 @@
 package com.github.theholydevil.storybook;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    GridView gridView;
-    ArrayList<Book> bookList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,19 +13,10 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        bookList = BookHandler.loadAllBooks();
-        gridView = (GridView) findViewById(R.id.grid_books_view);
-        ArrayList<String> bookNameList = new ArrayList<>();
-
-        for (int i = 0; i < bookList.size(); i++) {
-            bookNameList.add(bookList.get(i).getName());
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,
+                    BookOverview.newInstance()).commit();
         }
-
-        ArrayAdapter<String> listBookAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1,
-                bookNameList);
-        gridView.setAdapter(listBookAdapter);
-        gridView.setOnItemClickListener(new bookListListener(this));
     }
 
     @Override
@@ -55,7 +35,10 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.action_add:
+            case R.id.action_add_book:
+                //TODO Add book importer choose dialog Code
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        OpenFileFragment.newInstance(OpenFileFragmentState.DIRECTORY)).commit();
                 return true;
             case R.id.action_settings:
                 return true;
@@ -64,20 +47,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private class bookListListener implements AdapterView.OnItemClickListener {
-        AppCompatActivity compatActivity;
-
-        public bookListListener(AppCompatActivity activity) {
-            this.compatActivity = activity;
-        }
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view,
-                         int position, long id) {
-            BookHandler.saveBook(bookList.get(position));
-            startActivity(new Intent(this.compatActivity, ChapterReader.class));
-        }
     }
 }

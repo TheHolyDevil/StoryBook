@@ -14,14 +14,15 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.github.theholydevil.storybook.model.Book;
+
 /**
  * Created by Stefan on 06.09.2015.
  */
 
 public class ChapterReader extends FragmentActivity{
     private ViewPager viewPager;
-    FragmentAdapter fragmentAdapter;
-    private Book book;
+    private FragmentAdapter fragmentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,27 +31,22 @@ public class ChapterReader extends FragmentActivity{
         setContentView(R.layout.fragment_chapter_reader);
 
         fragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
-
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(fragmentAdapter);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        if (BookHandler.currentBook().getReadingOrientation().equals(ReadingOrientation.LEFT)) {
+            viewPager.setCurrentItem(BookHandler.currentBook().getPagePathList().size() - 1
+                    - getIntent().getIntExtra("startposition", 0), false);
+        } else viewPager.setCurrentItem(getIntent().getIntExtra("startposition", 0), false);
     }
 
-    public void goToLastPosition() {
-        switch (this.book.getReadingOrientation()){
-            case LEFT:
-                this.viewPager.setCurrentItem(this.book.getPagePathList().size()
-                        - this.book.getLastPosition() - 1);
-                break;
-            default:
-                this.viewPager.setCurrentItem(this.book.getLastPosition());
-                break;
-        }
-    }
+    @Override
+    public void onStop() {
+        BookHandler.currentBook().setLastPosition(this.viewPager.getCurrentItem());
 
-    public void goToChapter(int chapterIndex) {
-        this.viewPager.setCurrentItem(book.getChapterPageIndex(chapterIndex));
+        super.onStop();
     }
 
     public static class FragmentAdapter extends FragmentStatePagerAdapter {
